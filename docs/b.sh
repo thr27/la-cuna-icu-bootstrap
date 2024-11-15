@@ -5,10 +5,10 @@
 SERVERNAME=${SERVERNAME:-server1}
 DOMAIN=${DOMAIN:-la-cuna.icu}
 
-if [ f $SCRIPTPATH/bootstrap.sh ]; then
+if [ -f $SCRIPTPATH/bootstrap.sh ]; then
   source $SCRIPTPATH/bootstrap.sh
 else
-  if [ ! -f /tmp/bootstrap.sh ] ; then
+  if [ ! -f /tmp/bootstrap.sh ]; then
     wget https://thr27.github.io/la-cuna-icu-bootstrap/bootstrap.sh -O /tmp/bootstrap.sh
   fi
   source /tmp/bootstrap.sh
