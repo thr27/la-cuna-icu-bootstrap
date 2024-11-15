@@ -9,7 +9,18 @@ if [ "$EUID" -ne 0 ]
 	exit -1
 fi
 FQDN=${SERVERNAME}.${DOMAIN}
-SERVER_IP=$(echo $SSH_CONNECTION | cut -d ' ' -f 3)
+if [ ! -z "$SERVER_IP" ]; then
+    SERVER_IP=$(echo $SSH_CONNECTION | cut -d ' ' -f 3)
+
+    if [ -z "$SERVER_IP" ] ; then
+        ip addr show |grep 'scope global' | grep 'inet ' | awk '{print $2}' | cut -d'/' -f1
+    fi
+fi
+
+if [ -z "$SERVERNAME" ] || [ -z "$DOMAIN" ] || [ -z "$SERVER_IP" ] ; then
+    echo "Failed: Missing required variables SERVERNAME=$SERVERNAME,  DOMAIN=$DOMAIN or SERVER_IP=$SERVER_IP"
+    exit 1
+fi
 
 function add_host() {
 
