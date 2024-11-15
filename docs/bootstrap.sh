@@ -9,7 +9,7 @@ if [ "$EUID" -ne 0 ]
 	exit -1
 fi
 FQDN=${SERVERNAME}.${DOMAIN}
-if [ ! -z "$SERVER_IP" ]; then
+if [ -z "$SERVER_IP" ]; then
     SERVER_IP=$(echo $SSH_CONNECTION | cut -d ' ' -f 3)
 
     if [ -z "$SERVER_IP" ] ; then
