@@ -1,4 +1,6 @@
 #!bin/bash
+# You can bootstrap a server with
+# wget https://thr27.github.io/la-cuna-icu-bootstrap/b.sh
 
 SERVERNAME=${SERVERNAME:-server1}
 DOMAIN=${DOMAIN:-la-cuna.icu}
