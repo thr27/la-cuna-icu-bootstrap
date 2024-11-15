@@ -15,9 +15,9 @@ else
 fi
 
 # Check if functions are defined before calling them
-if declare -f add_host > /dev/null && declare -f add_ansible > /dev/null; then
+if declare -f add_host > /dev/null && declare -f add_ansible_user > /dev/null; then
   add_host
-  add_ansible
+  add_ansible_user
 else
-  echo "Functions add_host and/or add_ansible are not defined. Bootsrap script not found or failed ..."
+  echo "Functions add_host and/or add_ansible_user are not defined. Bootsrap script not found or failed ..."
 fi
