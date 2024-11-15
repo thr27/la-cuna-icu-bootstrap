@@ -1,5 +1,5 @@
 #!/bin/bash
-set -x
+#set -x
 echo $0
 SCRIPT=`readlink -f -- $0`
 SCRIPTPATH=`dirname $SCRIPT`
@@ -13,7 +13,7 @@ if [ -z "$SERVER_IP" ]; then
     SERVER_IP=$(echo $SSH_CONNECTION | cut -d ' ' -f 3)
 
     if [ -z "$SERVER_IP" ] ; then
-        ip addr show |grep 'scope global' | grep 'inet ' | awk '{print $2}' | cut -d'/' -f1
+        SERVER_IP=$(ip addr show |grep 'scope global' | grep 'inet ' | awk '{print $2}' | cut -d'/' -f1)
     fi
 fi
 
