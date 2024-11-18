@@ -47,7 +47,7 @@ function add_ansible_user() {
     chmod 600 /home/ansible/.ssh/authorized_keys
     chown -R ansible:ansible /home/ansible/.ssh
 
-    [ !-f ~/.ssh/authorized_keys ] cp /home/ansible/.ssh/authorized_keys  ~/.ssh/authorized_keys
+    [ !-f ~/.ssh/authorized_keys ] && cp /home/ansible/.ssh/authorized_keys  ~/.ssh/authorized_keys
     chmod 600 ~/.ssh/authorized_keys
 
 }
