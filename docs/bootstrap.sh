@@ -13,7 +13,7 @@ if [ -z "$SERVER_IP" ]; then
     SERVER_IP=$(echo $SSH_CONNECTION | cut -d ' ' -f 3)
 
     if [ -z "$SERVER_IP" ] ; then
-        SERVER_IP=$(ip addr show |grep 'scope global' | grep 'inet ' | awk '{print $2}' | cut -d'/' -f1)
+        SERVER_IP=$(ip addr show |grep 'scope global dynamic' | grep 'inet ' | awk '{print $2}' | cut -d'/' -f1)
     fi
 fi
 
@@ -29,7 +29,7 @@ function add_host() {
         echo $SERVER_IP ${FQDN} ${SERVERNAME} >> /etc/hosts
     fi
 
-    if [ ! $(hostname -f)  != "$FQDN" ]; then
+    if [ ! $(hostname -f 2>/dev/null)  != "$FQDN" ]; then
         echo Setting hostname to $SERVERNAME
         echo ${SERVERNAME} > /etc/hostname
 
@@ -47,7 +47,10 @@ function add_ansible_user() {
     chmod 600 /home/ansible/.ssh/authorized_keys
     chown -R ansible:ansible /home/ansible/.ssh
 
-    [ ! -f ~/.ssh/authorized_keys ] && cp /home/ansible/.ssh/authorized_keys  ~/.ssh/authorized_keys
-    chmod 600 ~/.ssh/authorized_keys
-
+    [ ! -f ~/.ssh/authorized_keys ] && touch ~/.ssh/authorized_keys
+    # Check if authorized_keys content is in user's authorized_keys
+    if ! grep -q -F -x -f /home/ansible/.ssh/authorized_keys ~/.ssh/authorized_keys; then
+        cat /home/ansible/.ssh/authorized_keys >> ~/.ssh/authorized_keys
+        chmod 600 ~/.ssh/authorized_keys
+    fi
 }
