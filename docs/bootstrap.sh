@@ -13,7 +13,7 @@ if [ -z "$SERVER_IP" ]; then
     SERVER_IP=$(echo $SSH_CONNECTION | cut -d ' ' -f 3)
 
     if [ -z "$SERVER_IP" ] ; then
-        SERVER_IP=$(ip addr show |grep 'scope global dynamic' | grep 'inet ' | awk '{print $2}' | cut -d'/' -f1)
+        SERVER_IP=$(ip addr show |grep -E 'scope global dynamic|scope global eth0' | grep 'inet ' | awk '{print $2}' | cut -d'/' -f1)
     fi
 fi
 
