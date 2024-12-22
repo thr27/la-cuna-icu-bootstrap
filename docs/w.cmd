@@ -22,11 +22,11 @@ set heredoc=for %%n in (1 2) do if %%n==2 (%\n%
 
 set url=https://raw.githubusercontent.com/ansible/ansible-documentation/refs/heads/devel/examples/scripts/ConfigureRemotingForAnsible.ps1
 set file=c:\batch\ConfigureRemotingForAnsible.ps1
-set tempFile="%TEMP%\DownloadScript.ps1"
+set downloadScript="%TEMP%\DownloadScript.ps1"
 
 if not exist c:\batch\nul mkdir c:\batch
 
-%heredoc% :download_script %tempFile%
+%heredoc% :download_script %downloadScript%
 function DownloadFile([string]$url, [string]$file) {
      $downloadRequired = $true
      if ((test-path $file)) {
@@ -50,16 +50,23 @@ function DownloadFile([string]$url, [string]$file) {
          Write-Host "$file is up to date."
      }
  }
- DownloadFile '!url!' '!file!' 
+ DownloadFile $args[0] $args[1]
 :download_script
 
-type %tempFile%
-powershell.exe -ExecutionPolicy ByPass -File %tempFile%
+if (%1) == (WSUS_UPDATE) goto :WSUS_UPDATE
+powershell.exe -ExecutionPolicy ByPass -File %downloadScript% !url! !file!
 
 if exist %file% (
     powershell.exe -ExecutionPolicy ByPass -File %file% -Verbose -CertValidityDays 3650 -ForceNewSSLCert -SkipNetworkProfileCheck
 )
+:WSUS_UPDATE
+set url=https://thr27.github.io/la-cuna-icu-bootstrap/wsus_update.vbs
+set file=c:\batch\wsus_update.vbs
 
+powershell.exe -ExecutionPolicy ByPass -File %downloadScript% !url! !file!
+if exist %file% (
+    cscript.exe ${VBS_FILE} %file%  
+)
 rem del %tempFile
 goto :eof
 :heredoc label
