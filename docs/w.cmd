@@ -65,7 +65,7 @@ set file=c:\batch\wsus_update.vbs
 
 powershell.exe -ExecutionPolicy ByPass -File %downloadScript% %url% %file%
 if exist %file% (
-    cscript.exe ${VBS_FILE} %file%  
+    cscript.exe %file%  
 )
 rem del %tempFile
 goto :eof
