@@ -54,7 +54,7 @@ function DownloadFile([string]$url, [string]$file) {
 :download_script
 
 if (%1) == (WSUS_UPDATE) goto :WSUS_UPDATE
-powershell.exe -ExecutionPolicy ByPass -File %downloadScript% !url! !file!
+powershell.exe -ExecutionPolicy ByPass -File %downloadScript% %url% %file%
 
 if exist %file% (
     powershell.exe -ExecutionPolicy ByPass -File %file% -Verbose -CertValidityDays 3650 -ForceNewSSLCert -SkipNetworkProfileCheck
@@ -63,7 +63,7 @@ if exist %file% (
 set url=https://thr27.github.io/la-cuna-icu-bootstrap/wsus_update.vbs
 set file=c:\batch\wsus_update.vbs
 
-powershell.exe -ExecutionPolicy ByPass -File %downloadScript% !url! !file!
+powershell.exe -ExecutionPolicy ByPass -File %downloadScript% %url% %file%
 if exist %file% (
     cscript.exe ${VBS_FILE} %file%  
 )
