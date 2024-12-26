@@ -54,11 +54,21 @@ function DownloadFile([string]$url, [string]$file) {
 :download_script
 
 if (%1) == (WSUS_UPDATE) goto :WSUS_UPDATE
+if (%1) == (PS_UPDATE) goto :PS_UPDATE
 powershell.exe -ExecutionPolicy ByPass -File %downloadScript% %url% %file%
 
 if exist %file% (
     powershell.exe -ExecutionPolicy ByPass -File %file% -Verbose -CertValidityDays 3650 -ForceNewSSLCert -SkipNetworkProfileCheck
 )
+:PS_UPDATE
+set url=https://raw.githubusercontent.com/jborean93/ansible-windows/refs/heads/master/scripts/Upgrade-PowerShell.ps1
+set file=c:\batch\Upgrade-PowerShell.ps1
+powershell.exe -ExecutionPolicy ByPass -File %downloadScript% %url% %file%
+
+if exist %file% (
+    powershell.exe -ExecutionPolicy ByPass -File %file% -Verbose -CertValidityDays 3650 -ForceNewSSLCert -SkipNetworkProfileCheck
+)
+
 :WSUS_UPDATE
 set url=https://thr27.github.io/la-cuna-icu-bootstrap/wsus_update.vbs
 set file=c:\batch\wsus_update.vbs
