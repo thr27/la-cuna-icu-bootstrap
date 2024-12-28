@@ -52,22 +52,27 @@ function DownloadFile([string]$url, [string]$file) {
  }
  DownloadFile $args[0] $args[1]
 :download_script
-
+if (%1) == (INST_WINRM) goto :INST_WINRM
+if (%1) == (PS7_INSTALL) goto :PS7_INSTALL
 if (%1) == (WSUS_UPDATE) goto :WSUS_UPDATE
-if (%1) == (PS_UPDATE) goto :PS_UPDATE
+
+:INST_WINRM
 powershell.exe -ExecutionPolicy ByPass -File %downloadScript% %url% %file%
 
 if exist %file% (
     powershell.exe -ExecutionPolicy ByPass -File %file% -Verbose -CertValidityDays 3650 -ForceNewSSLCert -SkipNetworkProfileCheck
 )
-:PS_UPDATE
-set url=https://raw.githubusercontent.com/jborean93/ansible-windows/refs/heads/master/scripts/Upgrade-PowerShell.ps1
-set file=c:\batch\Upgrade-PowerShell.ps1
+if (%1) == (INST_WINRM) goto :eof
+
+:PS7_INSTALL
+set url=https://github.com/PowerShell/PowerShell/releases/download/v7.4.6/PowerShell-7.4.6-win-x64.msi
+set file=c:\batch\PowerShell-7.4.6-win-x64.msi
 powershell.exe -ExecutionPolicy ByPass -File %downloadScript% %url% %file%
 
 if exist %file% (
-    powershell.exe -ExecutionPolicy ByPass -File %file% -Verbose -CertValidityDays 3650 -ForceNewSSLCert -SkipNetworkProfileCheck
+    msiexec.exe /package %file% /quiet ADD_EXPLORER_CONTEXT_MENU_OPENPOWERSHELL=1 ADD_FILE_CONTEXT_MENU_RUNPOWERSHELL=1 ENABLE_PSREMOTING=1 REGISTER_MANIFEST=1 USE_MU=1 ENABLE_MU=1 ADD_PATH=1
 )
+if (%1) == (PS7_INSTALL) goto :eof
 
 :WSUS_UPDATE
 set url=https://thr27.github.io/la-cuna-icu-bootstrap/wsus_update.vbs
@@ -77,7 +82,8 @@ powershell.exe -ExecutionPolicy ByPass -File %downloadScript% %url% %file%
 if exist %file% (
     cscript.exe %file%  
 )
-rem del %tempFile
+if (%1) == (WSUS_UPDATE) goto :eof
+
 goto :eof
 :heredoc label
 set "skip="
