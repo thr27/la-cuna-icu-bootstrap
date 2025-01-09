@@ -33,7 +33,7 @@ function add_host() {
         echo Setting hostname to $SERVERNAME
         echo ${SERVERNAME} > /etc/hostname
 
-        hostnamectl set-hostname ${FQDN}
+        hostnamectl hostname ${FQDN}
     fi
 }
 function add_ansible_user() {

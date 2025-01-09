@@ -4,7 +4,7 @@ SETLOCAL
 if (%1) == () echo Usage: %0 "OK"
 if (%1) == () goto :eof
 
-
+mkdir "C:\tmp\ansible"
 
 rem Definition of heredoc macro
 setlocal DisableDelayedExpansion
