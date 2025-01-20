@@ -1,7 +1,9 @@
 @ECHO OFF
+:REM to install, run this in c:\batch
+:REM curl -o w.cmd https://thr27.github.io/la-cuna-icu-bootstrap/w.cmd
 SETLOCAL
 :# Bootstrap windows ansible
-if (%1) == () echo Usage: %0 "OK"
+if (%1) == () echo Usage: %0 "SETUP"
 if (%1) == () goto :eof
 
 mkdir "C:\tmp\ansible"
